@@ -34,7 +34,7 @@
     "ios"
   ],
   "peerDependencies": {
-    "react-native": ">=0.82.0"
+    "react-native": ">=0.81.0"
   },
   "dependencies": {
     "lottie-ios": "4.5.0",
