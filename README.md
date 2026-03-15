@@ -1,3 +1,16 @@
+
+# History
+
+Fork From @ravinandan25/react-native-lottie-splash-screen
+At 2026-03-16
+
+- change dependency RN 0.82 to RN 0.81
+- fix index.d.ts
+- change to colored background on iOS
+- change to lottie size 300 to 40% of width
+
+
+
 # @ravinandan25/react-native-lottie-splash-screen
 
 [![npm](https://img.shields.io/badge/npm-@ravinandan25/react--native--lottie--splash--screen-blue)](https://www.npmjs.com/package/@ravinandan25/react-native-lottie-splash-screen)
