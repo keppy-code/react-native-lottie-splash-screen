@@ -46,9 +46,9 @@ public class SplashScreen: NSObject, RCTBridgeModule {
         rootView.backgroundColor = backgroundColor
 
         let animationView = LottieAnimationView(name: lottieName)
-        animationView.backgroundColor = backgroundColor
+        animationView.backgroundColor = .clear  // 투명 배경
         animationView.translatesAutoresizingMaskIntoConstraints = false
-        animationView.contentMode = .scaleAspectFill
+        animationView.contentMode = .scaleAspectFit  // Fill → Fit (비율 유지)
         animationView.loopMode = loop ? .loop : .playOnce  // <-- important for fullscreen
         animationView.animationSpeed = 1.0
 
@@ -68,21 +68,36 @@ public class SplashScreen: NSObject, RCTBridgeModule {
 
     @objc private static func showLottieSplash(_ animationView: UIView, inRootView rootView: UIView)
     {
-        loadingView = animationView
+        // 배경색을 가진 컨테이너 뷰 생성
+        let backgroundView = UIView(frame: rootView.bounds)
+        backgroundView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        backgroundView.backgroundColor = rootView.backgroundColor
+        rootView.addSubview(backgroundView)
+
+        loadingView = backgroundView
         isAnimationFinished = false
 
         // Ensure splash screen appears on top of React Native screen
-        rootView.addSubview(animationView)
+        // rootView.addSubview(animationView)
+        backgroundView.addSubview(animationView)
+
+        // 크기 조절: 고정 크기 또는 비율로 설정
+        // let size: CGFloat = 300  // 원하는 크기 (pt)
+        let screenWidth = rootView.frame.width
+        let size = screenWidth * 0.4  // 화면 너비의 40%
+
         NSLayoutConstraint.activate([
-            animationView.leadingAnchor.constraint(equalTo: rootView.leadingAnchor),
-            animationView.trailingAnchor.constraint(equalTo: rootView.trailingAnchor),
-            animationView.topAnchor.constraint(equalTo: rootView.topAnchor),
-            animationView.bottomAnchor.constraint(equalTo: rootView.bottomAnchor),
+            // 크기 제한
+            animationView.widthAnchor.constraint(equalToConstant: size),
+            animationView.heightAnchor.constraint(equalToConstant: size),
+            // 중앙 정렬
+            animationView.centerXAnchor.constraint(equalTo: backgroundView.centerXAnchor),
+            animationView.centerYAnchor.constraint(equalTo: backgroundView.centerYAnchor),
         ])
-        rootView.bringSubviewToFront(animationView)
+        rootView.bringSubviewToFront(backgroundView)
 
         // Set higher z-index to ensure splash screen stays on top
-        animationView.layer.zPosition = 1000
+        backgroundView.layer.zPosition = 1000
 
         // Temporarily raise the window level to ensure it stays on top
         let originalWindowLevel = window?.windowLevel
